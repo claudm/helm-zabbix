@@ -10,7 +10,8 @@ keywords:
 home: https://www.zabbix.com/
 icon: https://assets.zabbix.com/img/logo/zabbix_logo_500x131.png
 source:
-  - https://github.com/cetic/helm-zabbix
+  - https://github.com/claudm/helm-zabbix
 maintainers:
   - name: AyadiAmen
   - name: alexnuttinck
+  - name: claudemir

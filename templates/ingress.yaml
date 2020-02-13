@@ -1,14 +1,10 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "zabbix.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
+{{- $svcPort := .Values.serviceWeb.externalPort -}}
 apiVersion: extensions/v1beta1
-{{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-web
   labels:
 {{ include "zabbix.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -34,7 +30,7 @@ spec:
         {{- range .paths }}
           - path: {{ . }}
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: {{ $fullName }}-web
               servicePort: {{ $svcPort }}
         {{- end }}
   {{- end }}

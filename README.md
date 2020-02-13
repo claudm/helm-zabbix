@@ -12,14 +12,16 @@ This [Helm](https://github.com/cetic/helm-zabbix) chart installs [Zabbix](https:
 - Kubernetes cluster 1.10+
 - Helm 2.8.0+
 - PV provisioner support in the underlying infrastructure.
+- helm  table/postgresql
 
 ## Installation
 
 ### Add Helm repository
 
 ```bash
-helm repo add cetic https://cetic.github.io/helm-charts
+helm repo add claudm https://claudm.github.io/helm-charts
 helm repo update
+helm install --name zabbix-postgresql --set postgresqlUsername=zabbix,postgresqlPassword=zabbix,postgresqlDatabase=zabbix stable/postgresql
 ```
 
 ### Configure the chart
@@ -44,7 +46,7 @@ The following items can be set via `--set` flag during installation or configure
 Install the Zabbix helm chart with a release name `my-release`:
 
 ```bash
-helm install --name my-release cetic/helm-zabbix
+helm install --name my-release claudm/helm-zabbix
 ```
 
 ## Uninstallation

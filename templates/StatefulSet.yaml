@@ -1,42 +1,87 @@
 ---
+  apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    name: {{ template "zabbix.fullname" . }}-server
+    labels:
+      app: {{ include "zabbix.name"  . }}-server
+      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+      release: {{ .Release.Name | quote }}
+      heritage: {{ .Release.Service | quote }}
+  spec:
+    replicas: 1
+    serviceName: {{ template "zabbix.fullname" . }}-server
+    selector:
+      matchLabels:
+        app:  {{ template "zabbix.name" . }}-server
+        release: {{ .Release.Name }}
+    template:
+      metadata:
+        labels:
+          app: {{ include "zabbix.name" . }}-server
+          chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+          release: {{ .Release.Name | quote }}
+          heritage: {{ .Release.Service | quote }}
+      spec:
+        containers:
+          - name:  {{ template "zabbix.fullname" . }}-server
+            image: {{ .Values.zabbixServer.image.repository }}:{{ .Values.zabbixServer.image.tag }}
+            ports:
+              - containerPort: 10051
+                name: zabbix-trapper
+              - containerPort: 10052
+                name: zabbix-jmx
+            env:
+              - name: DB_SERVER_HOST
+                value: {{ .Values.zabbixServer.DB_SERVER_HOST }}
+              - name: POSTGRES_USER
+                value: {{ .Values.zabbixServer.POSTGRES_USER| quote }}
+              - name: POSTGRES_PASSWORD
+                value: {{ .Values.zabbixServer.POSTGRES_PASSWORD| quote }}
+              - name: POSTGRES_DB
+                value: {{ .Values.zabbixServer.POSTGRES_DB | quote}}
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "zabbix.fullname" . }}-server
+  name: {{ template "zabbix.fullname" . }}-web
   labels:
-    app: {{ include "zabbix.name" . | quote }}
+    app: {{ include "zabbix.name" .  }}-web
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
   replicas: 1
-  serviceName: {{ template "zabbix.fullname" . }}-server
+  serviceName: {{ template "zabbix.fullname" . }}-web
   selector:
     matchLabels:
-      app:  {{ template "zabbix.name" . }}
+      app:  {{ template "zabbix.name" . }}-web
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ include "zabbix.name" . | quote }}
+        app: {{ include "zabbix.name" .  }}-web
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
     spec:
       containers:
-        - name: zabbix-server
-          image: {{ .Values.zabbixServer.image.repository }}:{{ .Values.zabbixServer.image.tag }}
+        - name:   {{ template "zabbix.fullname" . }}-web
+          image: "{{ .Values.zabbixWeb.image.repository }}:{{ .Values.zabbixWeb.image.tag }}"
+          imagePullPolicy: {{ .Values.zabbixWeb.image.pullPolicy }}
           ports:
-            - containerPort: 10051
-              name: zabbix-trapper
-            - containerPort: 10052
-              name: zabbix-jmx
+            - containerPort: {{ .Values.serviceWeb.externalPort }}
           env:
             - name: DB_SERVER_HOST
-              value: {{ .Values.zabbixServer.DB_SERVER_HOST }}
-            - name: POSTGRES_USER
-              value: {{ .Values.zabbixServer.POSTGRES_USER }}
-            - name: POSTGRES_PASSWORD
-              value: {{ .Values.zabbixServer.POSTGRES_PASSWORD }}
-            - name: POSTGRES_DB
-              value: {{ .Values.zabbixServer.POSTGRES_DB }}
+              value: {{ .Values.zabbixWeb.DB_SERVER_HOST| quote }}
+            - name: DB_SERVER_ZBX_USER
+              value: {{ .Values.zabbixWeb.DB_SERVER_ZBX_USER |quote }}
+            - name: DB_SERVER_ZBX_PASS
+              value: {{ .Values.zabbixWeb.DB_SERVER_ZBX_PASS | quote }}
+            - name: DB_SERVER_DBNAME
+              value: {{ .Values.zabbixWeb.DB_SERVER_DBNAME | quote }}
+            - name: PHP_TZ
+              value: {{ .Values.zabbixWeb.PHP_TZ | quote }}
+            - name: ZBX_SERVER_NAME
+              value: {{ .Values.zabbixWeb.ZBX_SERVER_NAME | quote }}
+  

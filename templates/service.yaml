@@ -1,3 +1,4 @@
+{{- $svcPort := .Values.serviceWeb.externalPort -}}
 ---
 apiVersion: v1
 kind: Service
@@ -17,4 +18,22 @@ spec:
       targetPort: 10052
       name: zabbix-jmx
   selector:
-    name: zabbix-server
+    app: zabbix-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{  template "zabbix.fullname" . }}-web
+  labels:
+    app: {{ include "zabbix.name" . | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  ports:
+    - port:  {{ $svcPort }}
+      targetPort: 80
+      name: {{  template "zabbix.fullname" . }}-web
+  selector:
+    app:  {{ include "zabbix.name"  . }}-web
+
