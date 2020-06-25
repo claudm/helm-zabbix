@@ -19,7 +19,7 @@ This [Helm](https://github.com/cetic/helm-zabbix) chart installs [Zabbix](https:
 ### Add Helm repository
 
 ```bash
-helm repo add claudm https://claudm.github.io/helm-charts
+helm repo add claudm https://claudm.github.io/helm-zabbix
 helm repo update
 helm install --name zabbix-postgresql --set postgresqlUsername=zabbix,postgresqlPassword=zabbix,postgresqlDatabase=zabbix stable/postgresql
 ```
