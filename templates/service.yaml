@@ -1,0 +1,39 @@
+{{- $svcPort := .Values.serviceWeb.externalPort -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "zabbix.fullname" . }}-server
+  labels:
+    app: {{ include "zabbix.name" . | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  ports:
+    - port: 10051
+      targetPort: 10051
+      name: zabbix-trapper
+    - port: 10052
+      targetPort: 10052
+      name: zabbix-jmx
+  selector:
+    app: zabbix-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{  template "zabbix.fullname" . }}-web
+  labels:
+    app: {{ include "zabbix.name" . | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  ports:
+    - port:  {{ $svcPort }}
+      targetPort: 80
+      name: {{  template "zabbix.fullname" . }}-web
+  selector:
+    app:  {{ include "zabbix.name"  . }}-web
+
