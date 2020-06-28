@@ -1,3 +1,34 @@
 apiVersion: v1
-entries: {}
-generated: "2020-06-28T12:28:03.80547206-03:00"
+entries:
+  helm-chart-test:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2020-06-28T15:19:15.213151174-03:00"
+    description: A Helm chart for Kubernetes
+    digest: 35a4e31bfacc496f1b1bce664652916bb8701cc9df77f1b90534f5234ff297a6
+    name: helm-chart-test
+    urls:
+    - helm-chart/helm-chart-test-0.1.0.tgz
+    version: 0.1.0
+  helm-zabbix:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2020-06-28T15:19:15.212942005-03:00"
+    description: Zabbix is a mature and effortless enterprise-class open source monitoring
+      solution for network monitoring and application monitoring of millions of metrics.
+    digest: 41207366fd245b8fedd05d30801606d3f1e3c023f8d2611ae05c33bc3d6b799f
+    home: https://www.zabbix.com/
+    icon: https://assets.zabbix.com/img/logo/zabbix_logo_500x131.png
+    keywords:
+    - zabbix
+    - monitoring
+    - metics
+    maintainers:
+    - name: AyadiAmen
+    - name: alexnuttinck
+    - name: claudemir
+    name: helm-zabbix
+    urls:
+    - helm-zabbix-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-06-28T15:19:15.212082354-03:00"
