@@ -6,7 +6,7 @@ zabbixServer:
   replicaCount: 1
   image:
     repository: zabbix/zabbix-server-pgsql
-    tag: ubuntu-4.4.5
+    tag: ubuntu-latest
     pullPolicy: IfNotPresent
   DB_SERVER_HOST: "zabbix-postgresql"
   POSTGRES_USER: "zabbix"
@@ -19,7 +19,7 @@ zabbixWeb:    # The main Zabbix web UI or interface
     enabled: true
     image:
       repository: zabbix/zabbix-web-nginx-pgsql
-      tag:   ubuntu-4.4.5
+      tag:   ubuntu-latest
       pullPolicy: IfNotPresent
     ZBX_SERVER_HOST: zabbix-server
     ZBX_SERVER_NAME: zabbix-server
