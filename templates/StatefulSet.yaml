@@ -1,45 +1,45 @@
 ---
-  apiVersion: apps/v1
-  kind: StatefulSet
-  metadata:
-    name: {{ template "zabbix.fullname" . }}-server
-    labels:
-      app: {{ include "zabbix.name"  . }}-server
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-      release: {{ .Release.Name | quote }}
-      heritage: {{ .Release.Service | quote }}
-  spec:
-    replicas: 1
-    serviceName: {{ template "zabbix.fullname" . }}-server
-    selector:
-      matchLabels:
-        app:  {{ template "zabbix.name" . }}-server
-        release: {{ .Release.Name }}
-    template:
-      metadata:
-        labels:
-          app: {{ include "zabbix.name" . }}-server
-          chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-          release: {{ .Release.Name | quote }}
-          heritage: {{ .Release.Service | quote }}
-      spec:
-        containers:
-          - name:  {{ template "zabbix.fullname" . }}-server
-            image: {{ .Values.zabbixServer.image.repository }}:{{ .Values.zabbixServer.image.tag }}
-            ports:
-              - containerPort: 10051
-                name: zabbix-trapper
-              - containerPort: 10052
-                name: zabbix-jmx
-            env:
-              - name: DB_SERVER_HOST
-                value: {{ .Values.zabbixServer.DB_SERVER_HOST }}
-              - name: POSTGRES_USER
-                value: {{ .Values.zabbixServer.POSTGRES_USER| quote }}
-              - name: POSTGRES_PASSWORD
-                value: {{ .Values.zabbixServer.POSTGRES_PASSWORD| quote }}
-              - name: POSTGRES_DB
-                value: {{ .Values.zabbixServer.POSTGRES_DB | quote}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "zabbix.fullname" . }}-server
+  labels:
+    app: {{ include "zabbix.name"  . }}-server
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: 1
+  serviceName: {{ template "zabbix.fullname" . }}-server
+  selector:
+    matchLabels:
+      app:  {{ template "zabbix.name" . }}-server
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "zabbix.name" . }}-server
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      containers:
+        - name:  {{ template "zabbix.fullname" . }}-server
+          image: {{ .Values.zabbixServer.image.repository }}:{{ .Values.zabbixServer.image.tag }}
+          ports:
+            - containerPort: 10051
+              name: zabbix-trapper
+            - containerPort: 10052
+              name: zabbix-jmx
+          env:
+            - name: DB_SERVER_HOST
+              value: {{ .Values.zabbixServer.DB_SERVER_HOST }}
+            - name: POSTGRES_USER
+              value: {{ .Values.zabbixServer.POSTGRES_USER| quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.zabbixServer.POSTGRES_PASSWORD| quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.zabbixServer.POSTGRES_DB | quote}}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
